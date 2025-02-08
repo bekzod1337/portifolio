@@ -2,17 +2,20 @@ import React, { useEffect, useRef } from "react";
 
 const ParticleBackground = () => {
   const canvasRef = useRef(null);
-  const particles = [];
-  const fireworks = [];
+  const particles = useRef([]);
+  const fireworks = useRef([]);
   let lastMouseMove = 0;
-  let mouseX = null, mouseY = null; // Kursor koordinatalari
+  let mouseX = null, mouseY = null;
 
   useEffect(() => {
     const canvas = canvasRef.current;
     const ctx = canvas.getContext("2d");
 
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+    const resizeCanvas = () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    };
+    resizeCanvas();
 
     class Particle {
       constructor(x, y, size, speedX, speedY, color, lifespan = null) {
@@ -28,143 +31,98 @@ const ParticleBackground = () => {
       update() {
         this.x += this.speedX;
         this.y += this.speedY;
+        if (this.lifespan !== null) this.lifespan--;
 
-        // Parallax effekt (scroll yoki kursorga bog‘liq harakat)
-        if (mouseX !== null && mouseY !== null) {
-          let dx = this.x - mouseX;
-          let dy = this.y - mouseY;
-          let distance = Math.sqrt(dx * dx + dy * dy);
-
-          if (distance < 120) {
-            this.speedX += dx * 0.005;
-            this.speedY += dy * 0.005;
-          }
-        }
-
-        if (this.lifespan !== null) {
-          this.lifespan -= 1;
-        }
-
-        // Chegaraga yetganda teskari harakat
-        if (this.x > canvas.width || this.x < 0) this.speedX *= -1;
-        if (this.y > canvas.height || this.y < 0) this.speedY *= -1;
+        // Yorug‘lik effekti
+        ctx.shadowBlur = 15;
+        ctx.shadowColor = this.color;
       }
 
       draw() {
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
         ctx.fillStyle = this.color;
-
-        // Glow (yorug‘lik effekti)
-        ctx.shadowBlur = 10;
-        ctx.shadowColor = this.color;
-
         ctx.fill();
         ctx.closePath();
       }
     }
 
-    function initBackgroundParticles() {
+    const initParticles = () => {
+      particles.current = [];
       for (let i = 0; i < 50; i++) {
-        let size = Math.random() * 3 + 1;
+        let size = Math.random() * 4 + 1;
         let x = Math.random() * canvas.width;
         let y = Math.random() * canvas.height;
-        let speedX = (Math.random() - 0.5) * 2;
-        let speedY = (Math.random() - 0.5) * 2;
-        particles.push(
-          new Particle(x, y, size, speedX, speedY, "rgba(59, 130, 246, 0.7)")
+        let speedX = (Math.random() - 0.5) * 1.2;
+        let speedY = (Math.random() - 0.5) * 1.2;
+        particles.current.push(
+          new Particle(x, y, size, speedX, speedY, "rgba(59, 130, 246, 0.8)")
         );
       }
-    }
+    };
 
-    function createFirework(x, y) {
-      for (let i = 0; i < 15; i++) {
-        let size = Math.random() * 4 + 2;
-        let speedX = (Math.random() - 0.5) * 6;
-        let speedY = (Math.random() - 0.5) * 6;
-        let colors = [
-          "rgba(59, 130, 246, 1)",
-          "rgba(30, 144, 255, 1)",
-          "rgba(0, 191, 255, 1)",
-          "rgba(70, 130, 180, 1)",
-          "rgba(100, 149, 237, 1)",
-        ];
+    const createFirework = (x, y) => {
+      const numParticles = 20;
+      const colors = [
+        "#3b82f6", "#1e90ff", "#00bfff", "#4682b4",
+        "#87CEFA", "#5F9EA0", "#1E3A8A", "#1E40AF"
+      ];
+
+      for (let i = 0; i < numParticles; i++) {
+        let size = Math.random() * 3 + 2;
+        let angle = Math.random() * Math.PI * 2;
+        let speed = Math.random() * 3 + 1; // Salyut tezligi biroz tezroq
+
+        let speedX = Math.cos(angle) * speed;
+        let speedY = Math.sin(angle) * speed * 0.8; // Pastga tushmaslik uchun
+
         let color = colors[Math.floor(Math.random() * colors.length)];
-        fireworks.push(new Particle(x, y, size, speedX, speedY, color, 50));
+
+        fireworks.current.push(new Particle(x, y, size, speedX, speedY, color, 50));
       }
-    }
+    };
 
-    function animate() {
-      // Parallax effekti uchun sahifani skroll qilishda zarralarni harakatlantirish
-      let scrollOffset = window.scrollY * 0.1;
+    const animate = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height); // Tozalash
 
-      ctx.globalAlpha = 0.8;
-      ctx.fillStyle = "rgba(0, 0, 0, 0.1)";
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-      particles.forEach((particle) => {
-        particle.y += scrollOffset; // Parallax effekti
+      particles.current.forEach((particle) => {
         particle.update();
         particle.draw();
       });
 
-      for (let i = fireworks.length - 1; i >= 0; i--) {
-        fireworks[i].update();
-        fireworks[i].draw();
-        if (fireworks[i].lifespan <= 0) {
-          fireworks.splice(i, 1);
-        }
-      }
+      fireworks.current = fireworks.current.filter((firework) => firework.lifespan > 0);
+      fireworks.current.forEach((firework) => {
+        firework.update();
+        firework.draw();
+      });
 
       requestAnimationFrame(animate);
-    }
-
-    const handleMouseDown = (event) => {
-      createFirework(event.clientX, event.clientY);
     };
 
     const handleMouseMove = (event) => {
       mouseX = event.clientX;
       mouseY = event.clientY;
-      
+
       const now = Date.now();
-      if (now - lastMouseMove > 20) { // Juda tez harakatni ham sezadi
+      if (now - lastMouseMove > 30) {
         createFirework(event.clientX, event.clientY);
         lastMouseMove = now;
       }
     };
 
-    const handleScroll = () => {
-      // Sahifa siljinganda zarralarni harakatlantirish
-      particles.forEach((particle) => {
-        particle.y += window.scrollY * 0.02;
-      });
-    };
-
-    initBackgroundParticles();
+    initParticles();
     animate();
 
-    window.addEventListener("mousedown", handleMouseDown);
     window.addEventListener("mousemove", handleMouseMove);
-    window.addEventListener("scroll", handleScroll);
-    window.addEventListener("resize", () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    });
+    window.addEventListener("resize", resizeCanvas);
 
     return () => {
-      window.removeEventListener("mousedown", handleMouseDown);
       window.removeEventListener("mousemove", handleMouseMove);
-      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("resize", resizeCanvas);
     };
   }, []);
 
-  return (
-    <canvas
-      ref={canvasRef}
-      className="absolute top-0 left-0 w-full h-full -z-10"
-    />
-  );
+  return <canvas ref={canvasRef} className="absolute top-0 left-0 w-full h-full -z-10" />;
 };
 
 export default ParticleBackground;

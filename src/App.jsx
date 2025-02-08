@@ -21,9 +21,7 @@ const App = () => {
 
   return (
     <Router>
-      {/* Background Component */}
-      
-
+    
       {/* Main Content */}
       <div className="relative z-10 bg-black min-h-screen text-white">
       
