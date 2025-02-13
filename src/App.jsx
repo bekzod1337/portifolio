@@ -61,6 +61,7 @@ const App = () => {
 
   return (
     <Router>
+      {/* bacground */}
       <ParticleBackground />
       <div className="relative z-0 bg-black min-h-screen text-white">
         <Header />
