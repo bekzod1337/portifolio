@@ -63,7 +63,7 @@ const App = () => {
     <Router>
       {/* bacground */}
       <ParticleBackground />
-      <div className="relative z-0 bg-black min-h-screen text-white">
+      <div className="relative  z-20 min-h-screen text-white">
         <Header />
         <KeyboardNavigation />
         <Routes>
@@ -74,6 +74,7 @@ const App = () => {
         </Routes>
         <Footer />
       </div>
+      
     </Router>
   );
 };
