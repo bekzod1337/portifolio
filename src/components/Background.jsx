@@ -31,6 +31,15 @@ const ParticleBackground = () => {
       update() {
         this.x += this.speedX;
         this.y += this.speedY;
+
+        // Devorga tegsa yo‘nalishini o‘zgartirish
+        if (this.x - this.size <= 0 || this.x + this.size >= canvas.width) {
+          this.speedX *= -1;
+        }
+        if (this.y - this.size <= 0 || this.y + this.size >= canvas.height) {
+          this.speedY *= -1;
+        }
+
         if (this.lifespan !== null) this.lifespan--;
 
         // Yorug‘lik effekti
@@ -71,10 +80,10 @@ const ParticleBackground = () => {
       for (let i = 0; i < numParticles; i++) {
         let size = Math.random() * 3 + 2;
         let angle = Math.random() * Math.PI * 2;
-        let speed = Math.random() * 3 + 1; // Salyut tezligi biroz tezroq
+        let speed = Math.random() * 3 + 1;
 
         let speedX = Math.cos(angle) * speed;
-        let speedY = Math.sin(angle) * speed * 0.8; // Pastga tushmaslik uchun
+        let speedY = Math.sin(angle) * speed * 0.8;
 
         let color = colors[Math.floor(Math.random() * colors.length)];
 
@@ -122,7 +131,7 @@ const ParticleBackground = () => {
     };
   }, []);
 
-  return <canvas ref={canvasRef} className="absolute top-0 left-0 w-full h-full -z-10" />;
+  return <canvas ref={canvasRef} className="absolute top-0 left-0 w-full h-full z-10" />;
 };
 
 export default ParticleBackground;
