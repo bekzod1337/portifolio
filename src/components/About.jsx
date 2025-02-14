@@ -13,11 +13,16 @@ const About = () => {
         <div className="flex flex-col items-center p-6 rounded-xl shadow-lg bg-gray-800 hover:bg-opacity-80 transition-all duration-300 border border-gray-700">
           <h3 className="text-xl font-semibold mb-4 text-gray-200">Personal Information</h3>
           
+          <p className="text-gray-300 text-center">
+            My name is <span className="font-bold text-white">Bekzod</span>, and I was born on June 23, 2007, in Namangan, Uzbekistan. 
+            I have been learning programming for the past two years. Currently, I am a student at <span className="text-cyan-400">Najot Ta'lim</span> and <span className="text-cyan-400">TATU</span>.
+          </p>
+
           {/* Google Maps Link */}
-          <p className="flex items-center mb-3">
+          <p className="flex items-center mt-4">
             <FaMapMarkerAlt className="text-cyan-400 mr-2 text-lg" />
             <a
-              href="https://maps.app.goo.gl/uGBo1vtHZ96mKPABA" // Kordinatalarni o'zgartiring
+              href="https://maps.app.goo.gl/uGBo1vtHZ96mKPABA"
               target="_blank"
               rel="noopener noreferrer"
               className="text-cyan-400 hover:underline hover:text-cyan-300 transition-all"
@@ -27,55 +32,24 @@ const About = () => {
           </p>
 
           {/* Full Stack Developer */}
-          <p className="flex items-center mb-3">
+          <p className="flex items-center mt-3">
             <FaLaptopCode className="text-cyan-400 mr-2 text-lg" />
             <span className="text-gray-300">Full Stack Developer</span>
           </p>
 
           {/* Languages */}
-          <p className="flex items-center">
+          <p className="flex items-center mt-3">
             <FaLanguage className="text-cyan-400 mr-2 text-lg" />
             <span className="text-gray-300">English, Uzbek, Russian</span>
           </p>
         </div>
 
-        {/* Contact Information */}
+        {/* Interests */}
         <div className="flex flex-col items-center p-6 rounded-xl shadow-lg bg-gray-800 hover:bg-opacity-80 transition-all duration-300 border border-gray-700">
-          <h3 className="text-xl font-semibold mb-4 text-gray-200">Contact Information</h3>
-
-          {/* Email Link */}
-          <p className="mb-3 text-gray-300">
-            <strong>Email:</strong>{" "}
-            <a
-              href="mailto:yahikooo7586@email.com"
-              className="text-cyan-400 hover:underline hover:text-cyan-300 transition-all"
-            >
-              yahikooo7586@email.com
-            </a>
-          </p>
-
-          {/* Phone Link */}
-          <p className="mb-3 text-gray-300">
-            <strong>Phone:</strong>{" "}
-            <a
-              href="tel:+941527586"
-              className="text-cyan-400 hover:underline hover:text-cyan-300 transition-all"
-            >
-              +94 152 75 86
-            </a>
-          </p>
-
-          {/* Location Link */}
-          <p className="text-gray-300">
-            <strong>Location:</strong>{" "}
-            <a
-              href="https://maps.app.goo.gl/uGBo1vtHZ96mKPABA"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-cyan-400 hover:underline hover:text-cyan-300 transition-all"
-            >
-              17 Jiydakapa, Uychi, Namangan
-            </a>
+          <h3 className="text-xl font-semibold mb-4 text-gray-200">Interests</h3>
+          <p className="text-gray-300 text-center">
+            I am passionate about <span className="text-cyan-400">3D animations</span> and building <span className="text-cyan-400">custom computers</span>. 
+            Exploring new technologies and creating innovative projects keep me motivated.
           </p>
         </div>
 
