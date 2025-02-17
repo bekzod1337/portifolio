@@ -5,10 +5,10 @@ import Home from "./components/Home";
 import Skills from "./components/Skills";
 import About from "./components/About";
 import Contact from "./components/Contact";
-import Footer from "./components/Footer";
+// import Footer from "./components/Footer";
 import Loading from "./components/Loading";
 import ParticleBackground from "./components/Background";
-
+import { Analytics } from "@vercel/analytics/react"
 const KeyboardNavigation = () => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -61,6 +61,7 @@ const App = () => {
 
   return (
     <Router>
+      <Analytics />
       {/* bacground */}
       <ParticleBackground />
       <div className="relative  z-20 min-h-screen text-white">
