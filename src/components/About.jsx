@@ -15,7 +15,7 @@ const About = () => {
           
           <p className="text-gray-300 text-center">
             My name is <span className="font-bold text-white">Bekzod</span>, and I was born on June 23, 2007, in Namangan, Uzbekistan. 
-            I have been learning programming for the past two years. Currently, I am a student at <span className="text-cyan-400">Najot Ta'lim</span> and <span className="text-cyan-400">TATU</span>.
+            I have been learning programming for the past two years. Currently, I am a student at <span className="text-cyan-400">Najot Ta'lim</span> and <span className="text-cyan-400">TUIT</span>.
           </p>
 
           {/* Google Maps Link */}

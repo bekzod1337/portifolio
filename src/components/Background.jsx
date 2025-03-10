@@ -3,9 +3,6 @@ import React, { useEffect, useRef } from "react";
 const ParticleBackground = () => {
   const canvasRef = useRef(null);
   const particles = useRef([]);
-  const fireworks = useRef([]);
-  let lastMouseMove = 0;
-  let mouseX = null, mouseY = null;
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -18,21 +15,19 @@ const ParticleBackground = () => {
     resizeCanvas();
 
     class Particle {
-      constructor(x, y, size, speedX, speedY, color, lifespan = null) {
+      constructor(x, y, size, speedX, speedY, color) {
         this.x = x;
         this.y = y;
         this.size = size;
         this.speedX = speedX;
         this.speedY = speedY;
         this.color = color;
-        this.lifespan = lifespan;
       }
 
       update() {
         this.x += this.speedX;
         this.y += this.speedY;
 
-        // Devorga tegsa yo‘nalishini o‘zgartirish
         if (this.x - this.size <= 0 || this.x + this.size >= canvas.width) {
           this.speedX *= -1;
         }
@@ -40,9 +35,6 @@ const ParticleBackground = () => {
           this.speedY *= -1;
         }
 
-        if (this.lifespan !== null) this.lifespan--;
-
-        // Yorug‘lik effekti
         ctx.shadowBlur = 15;
         ctx.shadowColor = this.color;
       }
@@ -70,63 +62,23 @@ const ParticleBackground = () => {
       }
     };
 
-    const createFirework = (x, y) => {
-      const numParticles = 20;
-      const colors = [
-        "#3b82f6", "#1e90ff", "#00bfff", "#4682b4",
-        "#87CEFA", "#5F9EA0", "#1E3A8A", "#1E40AF"
-      ];
-
-      for (let i = 0; i < numParticles; i++) {
-        let size = Math.random() * 3 + 2;
-        let angle = Math.random() * Math.PI * 2;
-        let speed = Math.random() * 3 + 1;
-
-        let speedX = Math.cos(angle) * speed;
-        let speedY = Math.sin(angle) * speed * 0.8;
-
-        let color = colors[Math.floor(Math.random() * colors.length)];
-
-        fireworks.current.push(new Particle(x, y, size, speedX, speedY, color, 50));
-      }
-    };
-
     const animate = () => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height); // Tozalash
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
 
       particles.current.forEach((particle) => {
         particle.update();
         particle.draw();
       });
 
-      fireworks.current = fireworks.current.filter((firework) => firework.lifespan > 0);
-      fireworks.current.forEach((firework) => {
-        firework.update();
-        firework.draw();
-      });
-
       requestAnimationFrame(animate);
-    };
-
-    const handleMouseMove = (event) => {
-      mouseX = event.clientX;
-      mouseY = event.clientY;
-
-      const now = Date.now();
-      if (now - lastMouseMove > 30) {
-        createFirework(event.clientX, event.clientY);
-        lastMouseMove = now;
-      }
     };
 
     initParticles();
     animate();
 
-    window.addEventListener("mousemove", handleMouseMove);
     window.addEventListener("resize", resizeCanvas);
 
     return () => {
-      window.removeEventListener("mousemove", handleMouseMove);
       window.removeEventListener("resize", resizeCanvas);
     };
   }, []);

@@ -12,33 +12,32 @@ const Home = () => {
     }, 500);
 
     let i = 0;
-    setText(""); // Har safar boshlanganda matn tozalanadi
+    setText(""); 
 
     const typingInterval = setInterval(() => {
       if (i < fullText.length) {
-        setText(fullText.slice(0, i + 1)); // Matnni faqat kerakli qismi chiqadi
+        setText(fullText.slice(0, i + 1));
         i++;
       } else {
         clearInterval(typingInterval);
       }
     }, 100);
 
-    return () => clearInterval(typingInterval); // Toza cleanup
+    return () => clearInterval(typingInterval);
   }, []);
 
   return (
     <div className="flex flex-col lg:flex-row items-center justify-center lg:justify-between h-screen text-white px-6 lg:px-20">
-      {/* Profile Image on the Left */}
       <div
-        className={`relative w-40 h-40 sm:w-60 sm:h-60 md:w-72 md:h-72 lg:w-[400px] lg:h-[400px] xl:w-[500px] xl:h-[500px] 
-          rounded-lg overflow-hidden shadow-[0_0_40px] shadow-blue-400 transition-transform duration-300 hover:scale-110 
+        className={`relative rounded-full w-40 h-40 sm:w-60 sm:h-60 md:w-72 md:h-72 lg:w-[400px] lg:h-[400px] xl:w-[500px] xl:h-[500px] 
+           overflow-hidden shadow-[0_0_40px] shadow-blue-400 transition-transform duration-300 hover:scale-110 
           ${isVisible ? "opacity-100 scale-100" : "opacity-0 scale-50"} 
           transition-all duration-1000 ease-out`}
       >
         <img
           src={profileImage}
           alt="Profile"
-          className="object-cover w-full h-full border-2 border-blue-500 shadow-lg"
+          className="object-cover rounded-full w-full h-full border-2 border-blue-500 shadow-lg"
         />
       </div>
 
